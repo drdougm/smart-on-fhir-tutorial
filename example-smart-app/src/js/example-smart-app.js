@@ -18,7 +18,7 @@
                         $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
                               'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
                               'http://loinc.org|2089-1', 'http://loinc.org|55284-4',
-                              'http://loinc.org|74728-7','http://loinc.org|8867-4']
+                              'http://loinc.org|8867-4']
                       }
                     }
                   });
@@ -38,12 +38,11 @@
           }
 
           var height = byCodes('8302-2');
-          var systolicbp = getBloodPressureValue(byCodes('55284-4'),'8480-6');
-          var diastolicbp = getBloodPressureValue(byCodes('55284-4'),'8462-4');
-          var hdl = byCodes('2085-9');
-          var ldl = byCodes('2089-1');
-          var vitalSigns = byCodes('74728-7');
-          var heartRate = byCodes('8867-4');
+          var systolicbpObs = extractUsefulData(getBloodPressureValue(byCodes('55284-4'),'8480-6'));
+          var diastolicbpObs = extractUsefulData(getBloodPressureValue(byCodes('55284-4'),'8462-4'));
+          var hdlObs = extractUsefulData(byCodes('2085-9'));
+          var ldlObs = extractUsefulData(byCodes('2089-1'));
+          var hrObs = extractUsefulData(byCodes('8867-4'));
 
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
@@ -52,16 +51,10 @@
           p.lname = lname;
           p.height = getQuantityValueAndUnit(height[0]);
 
-          if (typeof systolicbp != 'undefined')  {
-            p.systolicbp = systolicbp;
-          }
-
-          if (typeof diastolicbp != 'undefined') {
-            p.diastolicbp = diastolicbp;
-          }
-
-          p.hdl = getQuantityValueAndUnit(hdl[0]);
-          p.ldl = getQuantityValueAndUnit(ldl[0]);
+          p.systolicbpObs = systolicbpObs;
+          p.diastolicbpObs = diastolicbpObs;
+          p.hdlObs = hdlObs;
+          p.ldlObs = ldlObs;
 
           ret.resolve(p);
         });
@@ -82,10 +75,11 @@
       gender: {value: ''},
       birthdate: {value: ''},
       height: {value: ''},
-      systolicbp: {value: ''},
-      diastolicbp: {value: ''},
-      ldl: {value: ''},
-      hdl: {value: ''},
+      systolicbpObs: {},
+      diastolicbpObs: {},
+      ldlObs: {},
+      hdlObs: {},
+      hrObs
     };
   }
 
@@ -103,7 +97,7 @@
       }
     });
 
-    return getQuantityValueAndUnit(formattedBPObservations[0]);
+    return formattedBPObservations;
   }
 
   function getQuantityValueAndUnit(ob) {
@@ -129,6 +123,15 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+  };
+
+  window.runCalculation = function(p) {
+    // do calculation
+    console.log(p);
+  };
+
+  window.extractUsefulData = function(data) {
+    return data.map(o => ({date: o.effectiveDateTime, value: o.valueQuantity, unit: o.unit}));
   };
 
 })(window);
