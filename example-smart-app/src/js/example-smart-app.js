@@ -18,7 +18,7 @@
                         $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
                               'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
                               'http://loinc.org|2089-1', 'http://loinc.org|55284-4',
-                              'http://loinc.org|74728-7']
+                              'http://loinc.org|74728-7', 'http://loinc.org|2089-1']
                       }
                     }
                   });
@@ -43,6 +43,7 @@
           var hdl = byCodes('2085-9');
           var ldl = byCodes('2089-1');
           var vitalSigns = byCodes('74728-7');
+          var cholesterol = byCodes('2089-1');
 
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
