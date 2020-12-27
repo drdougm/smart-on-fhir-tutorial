@@ -79,7 +79,7 @@
       diastolicbpObs: {},
       ldlObs: {},
       hdlObs: {},
-      hrObs
+      hrObs: {}
     };
   }
 
