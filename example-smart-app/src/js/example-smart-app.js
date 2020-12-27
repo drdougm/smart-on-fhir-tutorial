@@ -55,6 +55,7 @@
           p.diastolicbpObs = diastolicbpObs;
           p.hdlObs = hdlObs;
           p.ldlObs = ldlObs;
+          p.hrObs = hrObs;
 
           ret.resolve(p);
         });
@@ -75,11 +76,11 @@
       gender: {value: ''},
       birthdate: {value: ''},
       height: {value: ''},
-      systolicbpObs: {},
-      diastolicbpObs: {},
-      ldlObs: {},
-      hdlObs: {},
-      hrObs: {}
+      systolicbpObs: [],
+      diastolicbpObs: [],
+      ldlObs: [],
+      hdlObs: [],
+      hrObs: []
     };
   }
 
@@ -131,7 +132,7 @@
   };
 
   window.extractUsefulData = function(data) {
-    return data.map(o => ({date: o.effectiveDateTime, value: o.valueQuantity, unit: o.unit}));
+    return data.map(o => ({date: o.effectiveDateTime, value: o.valueQuantity.value, unit: o.valueQuantity.unit}));
   };
 
 })(window);
